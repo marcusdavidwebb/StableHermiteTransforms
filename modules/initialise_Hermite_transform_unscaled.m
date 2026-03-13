@@ -1,12 +1,12 @@
-function [d, Q] = initialise_Hermite_transform_unscaled(x)
+function [d, Q] = initialise_Hermite_transform_unscaled(N)
     % Builds the orthogonal matrix Q and weight vector d 
     % without using scaling to avoid overflow
     % 
-    % the coeffs2vals transform is d .* (Q * cfs) and
-    % the val2coeffs transform is Q' * (vals ./ d).
-    % x must be a column vector containing the Gauss-Hermite nodes
+    % the coeffs2vals transform is d .* (Q' * cfs) and
+    % the val2coeffs transform is Q * (vals ./ d).
+    % Q is N x N and d is N x 1
     
-    N = length(x);
+    x = hermpts(N);
     Q = zeros(N);
     hjm1 = ones(N,1) * pi^(-1/4);    % h_0(x) (first Hermite polynomial)
     Q(:,1) = hjm1; 
@@ -31,4 +31,5 @@ function [d, Q] = initialise_Hermite_transform_unscaled(x)
     for j = 1:N
         Q(:,j) = Q(:,j) ./ abs(Q(:,N)) .* exp(- 0.5 * log(N));
     end
+    Q = Q';
 end

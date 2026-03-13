@@ -103,8 +103,6 @@ for jj=1:jj_max
     min_d(jj)=max(abs(d));
     
     % To be continued
-    
-    
     save(strcat("data/numerical_eval_N_",num2str(Nfactor),"-",num2str(jj_max*Nfactor),".mat"))
 
 end

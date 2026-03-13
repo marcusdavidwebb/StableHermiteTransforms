@@ -20,7 +20,7 @@ function [d, Q] = initialise_Hermite_transform(N)
         [hjm1, hj] = deal(hj, sqrt(2/(j-1)) * x .* hj - sqrt((j-2)/(j-1)) * hjm1);
         
         % Rescale values to avoid overflow
-        scale = arrayfun(@(v) (v < 100) * 1 + (v >= 100) * (1/max(100,abs(v))), abs(hj));
+        scale = arrayfun(@(v) (v < 100) * 1 + (v >= 100) * (1/max(1,abs(v))), abs(hj));
         hj = hj .* scale; hjm1 = hjm1 .* scale;
         
         % Update cumulative log scaling

@@ -12,6 +12,9 @@ build/
 *.manifest
 *.spec
 
+# Chebfun
+chebfun/
+
 # Virtual environment
 venv/
 ENV/

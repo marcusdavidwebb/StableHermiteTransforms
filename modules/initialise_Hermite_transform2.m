@@ -10,7 +10,7 @@ function [d, Q] = initialise_Hermite_transform2(N)
     [Q, D] = eig(J);
     [x, indx] = sort(diag(D));
      Q = Q(:,indx);
-     Q = Q .* sign(Q(1,:));
+     Q = Q .* sign(Q(1,:)+eps);
      
      % Calculate d using asymptotics (valid for N > 200)
      theta0 = acos(x(floor(N/2)+1:end)./sqrt(2*N+1));

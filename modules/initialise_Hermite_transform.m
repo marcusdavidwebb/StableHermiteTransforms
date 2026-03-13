@@ -30,8 +30,6 @@ function [d, Q] = initialise_Hermite_transform(N)
         Q(:,j) = hj;  
     end
 
-    
-
     % Compute the weights
     d = sqrt(N) * abs(Q(:,N)) .* exp(-cum_log_scale(:,N) - x.^2 / 2);
 

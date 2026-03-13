@@ -74,3 +74,21 @@ set(gcf, 'Position',  [100, 100, 700, 600])
 
 exportgraphics(gcf,strcat("images/condition_numbers_",num2str(Nfactor),"-",num2str(jj_max*Nfactor),".pdf"),'ContentType','vector')
 % end
+
+%% Figure 5
+figure(5)
+semilogy(N_save, orthogonality_unscaled,'v-','linewidth',2, 'MarkerSize',10,'Color','#7e2f8e','MarkerFaceColor','white')
+hold on
+semilogy(N_save, orthogonality_new,'o-','linewidth',2, 'MarkerSize',10,'Color','black','MarkerFaceColor','white')
+semilogy(N_save, orthogonality_unscaled,'v-','linewidth',2, 'MarkerSize',10,'Color','#7e2f8e','MarkerFaceColor','white')
+
+
+set(gca,'FontSize',16)
+xlabel('$N$','Interpreter','latex', 'FontSize', 22)
+legend("Unscaled","Scaled",'Interpreter','latex', 'FontSize', 20,'Position',[0.24 0.8 0.1 0.1])
+grid on
+hold off
+set(gcf, 'Position',  [100, 100, 700, 600])
+
+exportgraphics(gcf,strcat("images/orthogonality_error_",num2str(Nfactor),"-",num2str(jj_max*Nfactor),".pdf"),'ContentType','vector')
+% end

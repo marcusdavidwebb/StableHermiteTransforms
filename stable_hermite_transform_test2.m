@@ -16,6 +16,8 @@ error_matrixnorm=zeros(jj_max,1);
 error_fn_approx_direct=zeros(jj_max,1);
 error_fn_approx_new=zeros(jj_max,1);
 error_fn_approx_unscaled=zeros(jj_max,1);
+orthogonality_new=zeros(jj_max,1);
+orthogonality_unscaled=zeros(jj_max,1);
 cond_unscaledforward=zeros(jj_max,1);
 cond_Hforward=zeros(jj_max,1);
 cond_Hbackward=zeros(jj_max,1);
@@ -85,6 +87,9 @@ for jj=1:jj_max
     min_d(jj)=max(abs(d));
     max_d_unscaled(jj)=min(abs(d1));
     min_d_unscaled(jj)=max(abs(d1));
+
+    orthogonality_unscaled(jj)=norm(Q1'*Q1-eye(N));
+    orthogonality_new(jj)=norm(Q'*Q-eye(N));
     
     % To be continued
     save(strcat("data/numerical_eval_N_",num2str(Nfactor),"-",num2str(jj_max*Nfactor),".mat"))

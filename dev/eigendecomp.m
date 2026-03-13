@@ -5,8 +5,8 @@ jmax=10;
 cost_sparse=zeros(jmax,1);
 cost_dense=zeros(jmax,1);
 
-%% Compare cost
 
+%% Compare cost
 
 for j=1:10
     n=2^j;
@@ -14,13 +14,19 @@ for j=1:10
     A=spdiags(a,-1,n,n);
     A=A+A';
     
+    [V,D]=eig(full(A));
+    d=diag(D);
     tic
-    [V,D]=eigs(A,n);
+    for l=1:n
+        [V,D]=eigs(A-d(l)*speye(n),1);
+    end
     cost_sparse(j)=toc;
 
     tic
-    [V,D]=eig(full(A));
-    cost_dense(j)=toc;
+    for l=1:10
+        [V,D]=eig(full(A));
+    end
+    cost_dense(j)=toc/10;
 
 
 end

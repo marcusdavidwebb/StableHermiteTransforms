@@ -1,0 +1,56 @@
+# Python-specific ignores
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.egg-info/
+*.manifest
+*.spec
+
+# Virtual environment
+venv/
+ENV/
+env/
+*.venv
+.Python
+.idea/
+
+# Jupyter notebooks
+.ipynb_checkpoints
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
+.Python
+*.env
+*.cover
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.pyo
+.pytest_cache/
+
+# macOS-specific ignores
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS directory attributes
+Icon?
+._*
+*.asv
+.DS_Store
+
+# Thumbnails
+.TemporaryItems
+.Trashes

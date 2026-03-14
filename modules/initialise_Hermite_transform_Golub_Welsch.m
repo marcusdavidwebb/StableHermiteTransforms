@@ -13,16 +13,17 @@ Q = Q(:,indx);
 % fix the sign of the columns of Q:
 Q = Q .* (-1).^(mod(N,2) + (1:N)) .* sign(Q(N,:));
 
-% d is proportional to abs(H_{N-1}(x))
-d = herm_poly(N-1, x(floor(N/2)+1:end));
+% d is proportional to abs(psi_{N-1}(x))
+d = herm_func(N-1, x(floor(N/2)+1:end));
 d = [d(end:-1:1); d((1+mod(N,2)):end)];
 % normalise so that exp(-x^2) is integrated exactly:
 d = abs(d) * (sqrt(sum(d.^(-2) .* exp(-x.^2)))/pi^(1/4));
 end
 
-function val = herm_poly(N, x)
+function val = herm_func(N, x)
 % evaluates the degree-N Hermite function up to an N-dependent constant
 % Adapted from Chebfun's hermpts code due to Alex Townsend.
+
 if N == 0
     val = exp(-x.^2/2);
 elseif N == 1

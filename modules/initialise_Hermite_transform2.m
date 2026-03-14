@@ -10,7 +10,7 @@ function [d, Q] = initialise_Hermite_transform2(N)
     [Q, D] = eig(J);
     [x, indx] = sort(diag(D));
      Q = Q(:,indx);
-     Q = Q .* sign(Q(1,:)+eps);
+     Q = Q .* (-1).^(1:N) .* sign(Q(N,:));
      
      % Calculate d using asymptotics (valid for N > 200)
      
@@ -104,16 +104,15 @@ dval = dval + D1.*Airy1/musq.^2;
 dval = const.*dval;
 end
 
-function [val, dval] = hermpoly_rec(n, x0)
+function [val, dval] = hermpoly_rec(n, x)
 % HERMPOLY_rec evaluation of scaled Hermite poly using recurrence
-x0 = x0*sqrt(2);
 % evaluate:
-Hold = exp(-x0.^2/4); H = x0.*exp(-x0.^2/4);
+Hold = exp(-x.^2/2); H = sqrt(2)*x.*exp(-x.^2/2);
 for k = 1:n-1
-    Hnew = (x0.*H./sqrt(k+1) - Hold./sqrt(1+1/k));
+    Hnew = x.*H.*sqrt(2/(k+1)) - Hold./sqrt(1+1/k);
     Hold = H; H = Hnew;
 end
 % evaluate derivative:
 val = Hnew;
-dval = (-x0.*Hnew + n^(1/2)*Hold);
+dval = (-x.*Hnew + n^(1/2)*Hold);
 end

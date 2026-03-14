@@ -1,7 +1,7 @@
 # StableHermiteTransforms
 Self-contained MATLAB codes for **stable transforms between Hermite function coefficients** and **function values at Gauss–Hermite nodes** (roots of Hermite polynomials).
 
-The main goal is to avoid numerical overflow/instability that appears when assembling Hermite transform matrices directly for moderate/large transform sizes `N`.
+This repository provides code that can assemble and compute the Hermite transform stably for moderate and large transform sizes `N`.
 
 ## What this repo provides
 
@@ -18,9 +18,9 @@ This lets you apply the transform without explicitly forming a dense, ill-condit
 
 - **[modules/]**
   - **[initialise_Hermite_transform_Golub_Welsch.m]**
-    Stable initializer based on the Golub–Welsch eigen-decomposition of the Hermite Jacobi matrix (recommended default).
+    Stable initialiser based on the Golub–Welsch eigen-decomposition of the Hermite Jacobi matrix (recommended default).
   - **[initialise_Hermite_transform_Bunck.m]**
-    Alternative stabilized recurrence approach (Bunck-style scaling).
+    Alternative stabilised recurrence approach (Bunck-style scaling).
   - **[initialise_Hermite_transform_unstable.m]**
     Baseline direct assembly of full transform matrices via a three-term recurrence (intended for comparison; becomes unstable for larger `N`).
   - **[quadrature/]**

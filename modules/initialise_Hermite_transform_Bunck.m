@@ -1,10 +1,10 @@
-function [d, Q] = initialise_Hermite_transform_old(x)
+function [d, Q] = initialise_Hermite_transform_Bunck(N)
     % Builds the orthogonal matrix Q and weight vector d such that
-    % the coeffs2vals transform is d .* (Q * cfs) and
-    % the val2coeffs transform is Q' * (vals ./ d).
-    % x must be a column vector containing the Gauss-Hermite nodes
+    % the coeffs2vals transform is d .* (Q' * cfs) and
+    % the val2coeffs transform is Q * (vals ./ d).
+    % Q is N x N and d is N x 1.
     
-    N = length(x);
+    x = hermpts(N);
     Q = zeros(N);
     hjm1 = ones(N,1) * pi^(-1/4);    % h_0(x) (first Hermite polynomial)
     Q(:,1) = hjm1; 
@@ -20,7 +20,7 @@ function [d, Q] = initialise_Hermite_transform_old(x)
         [hjm1, hj] = deal(hj, sqrt(2/(j-1)) * x .* hj - sqrt((j-2)/(j-1)) * hjm1);
         
         % Rescale values to avoid overflow
-        scale = arrayfun(@(v) (v < 100) * 1 + (v >= 100) * (1/abs(v)), abs(hj));
+        scale = arrayfun(@(v) (v < 100) * 1 + (v >= 100) * (1/max(1,abs(v))), abs(hj));
         hj = hj .* scale; hjm1 = hjm1 .* scale;
         
         % Update cumulative log scaling
@@ -38,4 +38,5 @@ function [d, Q] = initialise_Hermite_transform_old(x)
         Q(:,j) = Q(:,j) ./ abs(Q(:,N)) .* ... 
                     exp(cum_log_scale(:,N) - cum_log_scale(:,j) - 0.5 * log(N));
     end
+    Q = Q';
 end

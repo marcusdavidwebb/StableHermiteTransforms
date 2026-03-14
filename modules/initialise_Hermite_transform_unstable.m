@@ -1,4 +1,4 @@
-function [T, Tinv] = initialise_Hermite_transform_direct(N)
+function [T, Tinv] = initialise_Hermite_transform_unstable(N)
 %INITIALISE_HERMITE_TRANSFORM_DIRECT
 % Build the Hermite transform matrices directly via the unstable
 % three-term recurrence for Hermite functions:

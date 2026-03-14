@@ -12,23 +12,18 @@ addpath('../modules/')
 %% Parameters
 
 % Spatial / Hermite discretisation
-N = 50;
+N = 128;
 
 % Time discretisation
-T = 20.0;
+Tend = 3.0;
 dt = 0.001;
-M = round(T/dt);
-store_every = 50;
+M = round(Tend/dt);
+dt = Tend/M; % Correct for potential rounding discrepancy
 
 % Gross--Pitaevskii parameters
-beta = 1.0;              % nonlinearity strength
-omega_trap = 0.5;        % harmonic trap frequency
+beta = 1.0; % nonlinearity strength
 
-% Optional time-dependent forcing:
-use_forcing = false;
-E0 = 0.05;
-omega_laser = 0.5;
-phi = 0.0;
+dataset=strcat('N_',num2str(N),'_dt_',strrep(num2str(dt), '.', '-'),'_T_',strrep(num2str(Tend), '.', '-'),'_beta_',strrep(num2str(beta), '.', '-')); % Name of dataset for storage
 
 %% Initialise Hermite transforms
 x = hermpts(N); % Only used for plotting purposes
@@ -39,11 +34,6 @@ x = hermpts(N); % Only used for plotting purposes
 
 % Example 1: shifted Gaussian with phase
 psi0_fun = @(xx) exp(-0.5*(xx-1.0).^2) .* exp(1i*0.5*xx);
-
-% Other possible examples:
-% psi0_fun = @(xx) exp(-0.5*xx.^2);
-% psi0_fun = @(xx) sech(xx);
-% psi0_fun = @(xx) exp(-0.5*(xx+1).^2) + exp(-0.5*(xx-1).^2);
 
 psi1_phys = psi0_fun(x);
 psi2_phys = psi0_fun(x);
@@ -76,18 +66,25 @@ for m = 1:M
 
     psi2_herm = exp(-i*dt*((0:N-1)'+1/2)) .* psi2_herm;
 
-    
-    %figure(1)
-    if mod(m,100)==0
+    % Plot evolution of the solution field
+    linestyle=["-","--","-."];
+    if mod(m-1,1000)==0 & m<3000
         psi1_phys = d .* (Q' * psi1_herm);
         psi2_phys = d .* (Q' * psi2_herm);
-        plot(x,real(psi1_phys),'b-','LineWidth',2)
+        h(floor(m/1000)+1)=plot(x,real(psi2_phys),linestyle(floor(m/1000)+1),'Color','black','LineWidth',2,'MarkerFaceColor','white');
         hold on
-        plot(x,real(psi2_phys),'r--','LineWidth',2)
-        legend('Golub-Welsh','Direct')
-        hold off
+        set(gca,'FontSize',16)
+        xlabel('$x$','Interpreter','latex', 'FontSize', 22)
+        ylabel('$\mathrm{Re}(\psi(t))$','Interpreter','latex', 'FontSize', 22)
         ylim([-1,1])
-        pause(0.05)
-        m
+        xlim([-10,10])
+        grid on
+        
     end
+
+    
 end
+
+% Add legend and save graph
+legend(h,"t=0.0","t=1.0","t=2.0",'latex', 'FontSize', 16,'Location','northeast')
+exportgraphics(gcf,strcat('../images/solution_field_GP_joint_',dataset,'.pdf'),'ContentType','vector')

@@ -95,8 +95,16 @@ Plots are exported to `images/`.
 
 ## Notes on Gauss–Hermite nodes (`hermpts`)
 
-Some scripts call `hermpts(N)` (primarily for plotting or node generation). Ensure `hermpts` is available on your MATLAB path (commonly via Chebfun) or replace those calls with node generation from this repo’s quadrature routines (e.g. `quad_gauss_hermite(N)`).
+Some scripts call `hermpts(N)` (primarily for plotting or node generation). Ensure `hermpts` is available on your MATLAB path (commonly via [https://www.chebfun.org/download/](Chebfun)) or replace those calls with node generation from this repo's quadrature routines (e.g. `quad_gauss_hermite(N)`).
 
 ## Citation
 
-If you use this code in academic work, please cite the paper listed in `CITATION.cff`.
+If you use this code in your work, please cite the following paper:
+```
+@article{webb2026,
+     title={Stable Gauss--Hermite transforms via the Golub--Welsch algorithm},
+     author={Georg Maierhofer and Marcus Webb},
+     year={2026},
+     journal={arXiv preprint}
+  }
+```

@@ -6,7 +6,7 @@ addpath('modules/quadrature/')
 addpath('modules/')
 
 %% 
-N=10;
+N=50;
 
 [x,w]=quad_gauss_hermite(N); % quadrature points and nodes
 [T,Tinv]=initialise_Hermite_transform_direct(N);

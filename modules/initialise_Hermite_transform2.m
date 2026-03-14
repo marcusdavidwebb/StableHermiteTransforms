@@ -23,9 +23,12 @@ end
 function val = herm_poly(N, x)
 % evaluates the degree-N Hermite function up to an N-dependent constant
 % Adapted from Chebfun's hermpts code due to Alex Townsend.
-
-if N <= 400 % evaluate using recurrence
-    Hold = exp(-x.^2/2); 
+if N == 0
+    val = exp(-x.^2/2);
+elseif N == 1
+    val = x.*exp(-x.^2/2);
+elseif N <= 400 % evaluate using recurrence
+    Hold = exp(-x.^2/2);
     H = sqrt(2)*x.*Hold;
     for k = 1:N-1
         val = x.*H.*sqrt(2/(k+1)) - Hold./sqrt(1+1/k);

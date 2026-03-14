@@ -12,12 +12,16 @@ Nfactor=10;
 time_new=zeros(jj_max,1);
 time_direct=zeros(jj_max,1);
 time_unscaled=zeros(jj_max,1);
+time_large=zeros(jj_max,1);
 error_matrixnorm=zeros(jj_max,1);
+error_inverse=zeros(jj_max,1);
 error_fn_approx_direct=zeros(jj_max,1);
 error_fn_approx_new=zeros(jj_max,1);
 error_fn_approx_unscaled=zeros(jj_max,1);
+error_fn_approx_large=zeros(jj_max,1);
 orthogonality_new=zeros(jj_max,1);
 orthogonality_unscaled=zeros(jj_max,1);
+orthogonality_large=zeros(jj_max,1);
 cond_unscaledforward=zeros(jj_max,1);
 cond_Hforward=zeros(jj_max,1);
 cond_Hbackward=zeros(jj_max,1);
@@ -49,20 +53,27 @@ for jj=1:jj_max
     
     %% Unscaled Hermite transform
     tic
-    [d1, Q1] = initialise_Hermite_transform_unscaled(x);
+    [d1, Q1] = initialise_Hermite_transform_unscaled(N);
     time_unscaled(jj)=toc;
     
     %% New Hermite transform
     tic
-    [d, Q] = initialise_Hermite_transform(x);
+    [d, Q] = initialise_Hermite_transform(N);
     time_new(jj)=toc;
+    
+    %% E-decomposition
+    tic
+    [d2,Q2] = initialise_Hermite_transform2(N);
+    time_large(jj)=toc;
 
     %% Some tests
     
     % Error in matrix norm
 
-    error_matrixnorm(jj)=norm(Q'.*(1./d)' - Q1'.*(1./d1)');
+    error_matrixnorm(jj)=max(abs(d-d2));%norm(Q.*(1./d)' - Q2.*(1./d2)');
+    error_inverse(jj)=max(abs(1./d-1./d2));%norm(Q.*(1./d)' - Q2.*(1./d2)');
     
+    % error_matrixnorm(jj)=max(abs(d-d1));
 
     %norm(Q1.*valweights' - Hforward)
     
@@ -71,25 +82,29 @@ for jj=1:jj_max
     %f=@(x) sum(exp(i*x*rand(1,3)),2).*exp(-x.^2/2);
     f_val=f(x);
     
-    f_coeff1=Q1'*((1./d1).*f_val);
-    f_coeff2=Q'*((1./d).*f_val);
+    f_coeff3=Q2*((1./d2).*f_val);
+    f_coeff1=Q1*((1./d1).*f_val);
+    f_coeff2=Q*((1./d).*f_val);
     
-    f_val1=d1.*Q1*(f_coeff2);
-    f_val2=d.*Q*(f_coeff2);
+    f_val1=d1.*Q1'*(f_coeff2);
+    f_val2=d.*Q'*(f_coeff2);
+    f_val3=d2.*Q2'*(f_coeff2);
     
     error_fn_approx_unscaled(jj)=norm(f_val-f_val1);
     error_fn_approx_new(jj)=norm(f_val-f_val2);
+    error_fn_approx_large(jj)=norm(f_val-f_val3);
 
-    cond_newforward(jj)=cond(Q'.*(1./d)');
-    cond_unscaledforward(jj)=cond(Q1'.*(1./d1)');
+    cond_newforward(jj)=cond(Q.*(1./d)');
+    cond_unscaledforward(jj)=cond(Q1.*(1./d1)');
     % cond_Hbackward(jj)=cond(Hbackward);
     max_d(jj)=min(abs(d));
     min_d(jj)=max(abs(d));
     max_d_unscaled(jj)=min(abs(d1));
     min_d_unscaled(jj)=max(abs(d1));
 
-    orthogonality_unscaled(jj)=norm(Q1'*Q1-eye(N));
-    orthogonality_new(jj)=norm(Q'*Q-eye(N));
+    % orthogonality_unscaled(jj)=norm(Q1'*Q1-eye(N));
+    % orthogonality_new(jj)=norm(Q'*Q-eye(N));
+    % orthogonality_large(jj)=norm(Q2'*Q2-eye(N));
     
     % To be continued
     save(strcat("data/numerical_eval_N_",num2str(Nfactor),"-",num2str(jj_max*Nfactor),".mat"))

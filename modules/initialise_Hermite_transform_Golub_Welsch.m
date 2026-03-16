@@ -6,8 +6,8 @@ function [d, Q] = initialise_Hermite_transform_Golub_Welsch(N)
 % Calculate Q via eigendecomposition of Jacobi matrix:
 beta = sqrt(.5*(1:N-1));
 J = diag(beta, 1) + diag(beta, -1);
-[Q, D] = eig(J);
-[x, indx] = sort(diag(D)); % x = Gauss-Hermite quadrature nodes
+[Q, x] = eig(J,'vector');
+[x, indx] = sort(x); % x = Gauss-Hermite quadrature nodes
 Q = Q(:,indx);
 % fix the sign of the columns of Q:
 Q = Q .* (-1).^(mod(N,2) + (1:N)) .* sign(Q(N,:));

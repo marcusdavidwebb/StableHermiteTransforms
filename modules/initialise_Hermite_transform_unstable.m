@@ -6,11 +6,11 @@ function [T, Tinv] = initialise_Hermite_transform_unstable(N)
 %   psi_{j+1}(x) = sqrt(2/(j+1)) * x .* psi_j(x) - sqrt(j/(j+1)) * psi_{j-1}(x)
 %
 % Outputs:
-%   Hbackward : NxN matrix, maps coefficients -> values
-%               v = Hbackward * c
+%   T : NxN matrix, maps coefficients -> values
+%               v = T * c
 %
-%   Hforward  : NxN matrix, maps values -> coefficients
-%               c = Hforward * v
+%   Tinv  : NxN matrix, maps values -> coefficients
+%               c = Tinv * v
 %
 %   x         : Gauss-Hermite nodes
 %   w         : Gauss-Hermite quadrature weights

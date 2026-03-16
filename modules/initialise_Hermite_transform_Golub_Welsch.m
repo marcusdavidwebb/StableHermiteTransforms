@@ -2,9 +2,8 @@ function [d, Q] = initialise_Hermite_transform_Golub_Welsch(N)
 % Builds the orthogonal matrix Q and weight vector d such that
 % the coeffs2vals transform is d .* (Q' * cfs) and
 % the val2coeffs transform is Q * (vals ./ d).
-% Q is N x N and d is N x 1.
 
-% Calculate x and Q via eigendecomposition of Jacobi matrix:
+% Calculate Q via eigendecomposition of Jacobi matrix:
 beta = sqrt(.5*(1:N-1));
 J = diag(beta, 1) + diag(beta, -1);
 [Q, D] = eig(J);
@@ -16,12 +15,11 @@ Q = Q .* (-1).^(mod(N,2) + (1:N)) .* sign(Q(N,:));
 % d is proportional to abs(psi_{N-1}(x))
 d = herm_func(N-1, x(floor(N/2)+1:end));
 d = [d(end:-1:1); d((1+mod(N,2)):end)];
-% normalise so that exp(-x^2) is integrated exactly:
 d = abs(d) * (sqrt(sum(d.^(-2) .* exp(-x.^2)))/pi^(1/4));
 end
 
 function val = herm_func(N, x)
-% evaluates the degree-N Hermite function up to an N-dependent constant
+% Evaluates the degree-N Hermite function up to an N-dependent constant
 % Adapted from Chebfun's hermpts code due to Alex Townsend.
 
 if N == 0
@@ -29,12 +27,10 @@ if N == 0
 elseif N == 1
     val = x.*exp(-x.^2/2);
 elseif N <= 400 % evaluate using recurrence
-    Hold = exp(-x.^2/2);
-    H = sqrt(2)*x.*Hold;
+    Hold = exp(-x.^2/2); H = sqrt(2)*x.*Hold;
     for k = 1:N-1
         val = x.*H.*sqrt(2/(k+1)) - Hold./sqrt(1+1/k);
-        Hold = H; 
-        H = val;
+        Hold = H; H = val;
     end
 else % evaluate using Airy asymptotics DLMF (12.10.35)
     theta = acos(x./sqrt(2*N+1));
@@ -76,5 +72,4 @@ else % evaluate using Airy asymptotics DLMF (12.10.35)
 
     val = phi.*val;
 end
-
 end

@@ -12,7 +12,7 @@ Q = Q(:,indx);
 % fix the sign of the columns of Q:
 Q = Q .* (-1).^(mod(N,2) + (1:N)) .* sign(Q(N,:));
 
-% d is proportional to abs(psi_{N-1}(x))
+% d = sqrt(N)*abs(psi_{N-1}(x))
 d = herm_func(N-1, x(floor(N/2)+1:end));
 d = [d(end:-1:1); d((1+mod(N,2)):end)];
 d = abs(d) * (sqrt(sum(d.^(-2) .* exp(-x.^2)))/pi^(1/4));
@@ -36,8 +36,7 @@ else % evaluate using Airy asymptotics DLMF (12.10.35)
     theta = acos(x./sqrt(2*N+1));
     musq = 2*N+1;
     cosT = cos(theta); sinT = sin(theta);
-    sin2T = 2*cosT.*sinT;
-    eta = .5*theta - .25*sin2T;
+    eta = .5*theta - .5*cosT.*sinT;
     chi = -(3*eta/2).^(2/3);
     phi = (-chi./sinT.^2).^(1/4);
     Airy0 = real(airy(musq.^(2/3)*chi));

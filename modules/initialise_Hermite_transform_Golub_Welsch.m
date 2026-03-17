@@ -1,74 +1,57 @@
 function [d, Q] = initialise_Hermite_transform_Golub_Welsch(N)
+%INITIALISE_HERMITE_TRANSFORM_GOLUB_WELSCH
 % Builds the orthogonal matrix Q and weight vector d such that
 % the coeffs2vals transform is d .* (Q' * cfs) and
 % the val2coeffs transform is Q * (vals ./ d).
 
 % Calculate Q via eigendecomposition of Jacobi matrix:
-beta = sqrt(.5*(1:N-1));
-J = diag(beta, 1) + diag(beta, -1);
+J = diag(sqrt(.5:.5:(N-1)/2), 1) + diag(sqrt(.5:.5:(N-1)/2), -1);
 [Q, x] = eig(J,'vector');
-[x, indx] = sort(x); % x = Gauss-Hermite quadrature nodes
-Q = Q(:,indx);
-% fix the sign of the columns of Q:
-Q = Q .* (-1).^(mod(N,2) + (1:N)) .* sign(Q(N,:));
+[x, indx] = sort(x); Q = Q(:,indx); % just in case
+Q = Q .* sign(Q(N,:)) .* (-1).^(N+1:2*N);
 
-% d = sqrt(N)*abs(psi_{N-1}(x))
-d = herm_func(N-1, x(floor(N/2)+1:end));
+d = sqrt(N) * abs(herm_func(N-1, x(floor(N/2)+1:end)));
 d = [d(end:-1:1); d((1+mod(N,2)):end)];
-d = abs(d) * (sqrt(sum(d.^(-2) .* exp(-x.^2)))/pi^(1/4));
 end
 
 function val = herm_func(N, x)
-% Evaluates the degree-N Hermite function up to an N-dependent constant
-% Adapted from Chebfun's hermpts code due to Alex Townsend.
-
-if N == 0
-    val = exp(-x.^2/2);
-elseif N == 1
-    val = x.*exp(-x.^2/2);
-elseif N <= 200 % evaluate using recurrence
-    Hold = exp(-x.^2/2); H = sqrt(2)*x.*Hold;
-    for k = 1:N-1
-        val = x.*H.*sqrt(2/(k+1)) - Hold./sqrt(1+1/k);
-        Hold = H; H = val;
+% Evaluates the degree-N Hermite function (for x \in [0, sqrt(2N+1)])
+if N <= 200 % use Clenshaw's algorithm
+    val = exp(-x.^2/2)/pi^(1/4);
+    val1 = zeros(size(x));
+    for k = N:-1:1
+        val2 = val1; val1 = val;
+        val = x.*val1*sqrt(2/k) - val2/sqrt(1+1/k);
     end
-else % evaluate using Airy asymptotics DLMF (12.10.35)
-    theta = acos(x./sqrt(2*N+1));
-    musq = 2*N+1;
-    cosT = cos(theta); sinT = sin(theta);
-    eta = .5*theta - .5*cosT.*sinT;
-    chi = -(3*eta/2).^(2/3);
-    phi = (-chi./sinT.^2).^(1/4);
-    Airy0 = real(airy(musq.^(2/3)*chi));
-    Airy1 = real(airy(1,musq.^(2/3)*chi));
+else % use Airy asymptotics, DLMF (12.10.35)
+    mu2 = 2*N+1; t = x/sqrt(mu2);      % 12.10.1
+    theta = acos(t); t2 = t.^2;
+    eta = (theta - t.*sqrt(1-t2))/2;   % 12.10.23
+    zeta = -(3*eta/2).^(2/3);          % 12.10.39
+    phi = (zeta./(t2-1)).^(1/4);       % 12.10.40
 
-    % Terms in DLMF (12.10.43):
-    a0 = 1; b0 = 1;
+    % 12.10.43:
     a1 = 15/144; b1 = -7/5*a1;
     a2 = 5*7*9*11/2/144^2; b2 = -13/11*a2;
     a3 = 7*9*11*13*15*17/6/144^3;
+    
+    % 12.10.9:
+    u1 = (t2-6).*t/24; u2 = ((-9*t2 + 249).*t2 + 145)/1152;
+    u3 = ((((-4042*t2+18189).*t2-28287).*t2-151995).*t2-259290).*t/414720;
 
-    % u polynomials in DLMF (12.10.9)
-    u0 = 1; u1 = (cosT.^3-6*cosT)/24;
-    u2 = (-9*cosT.^4 + 249*cosT.^2 + 145)/1152;
-    u3 = (-4042*cosT.^9+18189*cosT.^7-28287*cosT.^5-151995*cosT.^3-259290*cosT)/414720;
+    % 12.10.42:    
+    phi6 = phi.^6; A0 = 1; B0 = -(phi6.*u1+a1)./zeta.^2;
+    A1 = ((phi6.*u2 + b1*u1).*phi6 + b2)./zeta.^3;
+    B1 = -(((phi6.*u3 + a1*u2).*phi6 + a2*u1).*phi6 + a3)./zeta.^5;
 
-    %first term
-    A0 = 1;
-    val = A0*Airy0;
-
-    %second term
-    B0 = -(a0*phi.^6.*u1+a1*u0)./chi.^2;
-    val = val + B0.*Airy1./musq.^(4/3);
-
-    %third term
-    A1 = (b0*phi.^12.*u2 + b1*phi.^6.*u1 + b2*u0)./chi.^3;
-    val = val + A1.*Airy0/musq.^2;
-
-    %fourth term
-    B1 = -(phi.^18.*u3 + a1*phi.^12.*u2 + a2*phi.^6.*u1 + a3*u0)./chi.^5;
-    val = val + B1.*Airy1./musq.^(4/3+2);
-
-    val = phi.*val;
+    % 12.10.35:
+    Airy0 = airy(mu2^(2/3)*zeta);
+    Airy1 = airy(1, mu2^(2/3)*zeta);
+    val = Airy0.*(A0+A1/mu2^2) + (Airy1/mu2^(4/3)).*(B0+B1/mu2^2);
+    
+    % 12.10.14:
+    g = (((-4027/4976640/mu2 + 1003/103680)/mu2 + 1/576)/mu2 - 1/24)/mu2 + 1;
+    g = g*exp(-gammaln(N+1)/2+(mu2/4-1/12)*log(mu2)-(mu2-3)*log(2)/4-mu2/4);
+    val = (pi^(1/4) * g) * phi .* val;
 end
 end

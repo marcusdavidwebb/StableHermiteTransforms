@@ -74,3 +74,23 @@ legend(h,'Direct', 'Bunck', 'Golub--Welsch','Interpreter','latex', 'FontSize', 1
 grid on
 hold off
 exportgraphics(gcf,strcat("images/cond_T_multiple.pdf"),'ContentType','vector')
+
+%% Plot 5: Accuracy of asymptotic algorithm
+
+load("data/numerical_eval_N_multiple_transforms_asymptotic.mat")
+clear h
+figure(5)
+h(2)=loglog(N_vec,T_error_GW,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
+hold on
+h(1)=loglog(N_vec,N_vec.^(-4)*0.1,'--','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
+%loglog(N_vec,N_vec.^(-4),'-.','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
+set(gca,'FontSize',16)
+ylabel('$\|T-T_{\mathrm{approx}}\|_2$','Interpreter','latex', 'FontSize', 22)
+xlabel('$N$','Interpreter','latex', 'FontSize', 22)
+
+legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Interpreter','latex', 'FontSize', 16,'Location','northwest')
+grid on
+hold off
+ylim([1e-15,1])
+xlim([min(N_vec),max(N_vec)])
+exportgraphics(gcf,strcat("images/error_T_asymptotic.pdf"),'ContentType','vector')

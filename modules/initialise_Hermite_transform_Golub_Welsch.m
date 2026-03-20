@@ -7,7 +7,6 @@ function [d, Q] = initialise_Hermite_transform_Golub_Welsch(N)
 
 J = diag(sqrt(.5:.5:(N-1)/2), 1) + diag(sqrt(.5:.5:(N-1)/2), -1);
 [Q, x] = eig(J, 'vector');                % see Golub-Welsch 1969
-[x, indx] = sort(x); Q = Q(:,indx);       % x = Gauss-Hermite nodes
 Q = Q .* sign(Q(N,:)) .* (-1).^(N+1:2*N); % enforce signs of final row
 
 d = sqrt(N) * abs(herm_func(N-1, x(floor(N/2)+1:end)));

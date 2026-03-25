@@ -76,11 +76,29 @@ grid on
 hold off
 exportgraphics(gcf,strcat("images/cond_T_multiple.pdf"),'ContentType','vector')
 
-%% Plot 5: Accuracy of asymptotic algorithm
+%% Plot 5: Condition number of Tinv
+clear h
+figure(5)
+h(3)=loglog(N_vec,cond_inv_GW,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
+hold on
+h(2)=loglog(N_vec,cond_inv_B,'-.','Color','#edb120','LineWidth',3,'MarkerFaceColor','white')
+h(1)=loglog(N_vec,cond_inv_direct,'--','Color','#c74cb9','LineWidth',3,'MarkerFaceColor','white')%,'Color','#edb120','LineWidth',2)
+set(gca,'FontSize',16)
+ylabel('$\mathrm{cond}(T)$','Interpreter','latex', 'FontSize', 22)
+xlabel('$N$','Interpreter','latex', 'FontSize', 22)
+
+legend(h,'Direct', 'Bunck', 'Golub--Welsch','Interpreter','latex', 'FontSize', 16,'Location','northwest')
+grid on
+ylim([1,1e16])
+hold off
+exportgraphics(gcf,strcat("images/cond_inv_T_multiple.pdf"),'ContentType','vector')
+
+
+%% Plot 6: Accuracy of asymptotic algorithm
 
 load("data/numerical_eval_N_multiple_transforms_asymptotic.mat")
 clear h
-figure(5)
+figure(6)
 h(2)=loglog(N_vec,T_error_GW,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
 h(1)=loglog(N_vec,N_vec.^(-4)*0.1,'--','Color','red','LineWidth',1.5,'MarkerFaceColor','white')

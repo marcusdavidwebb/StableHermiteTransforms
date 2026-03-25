@@ -25,6 +25,10 @@ cond_GW = zerovec;
 cond_B = zerovec;
 cond_direct = zerovec;
 
+cond_inv_GW = zerovec;
+cond_inv_B = zerovec;
+cond_inv_direct = zerovec;
+
 %% Evaluate the performance tests for various transform sizes
 for jj=1:max(size(N_vec))
     jj
@@ -71,6 +75,11 @@ for jj=1:max(size(N_vec))
     cond_B(jj) = cond(diag(d_B) * Q_B');
     cond_direct(jj) = cond(T);
 
+    % Evaluate the condition number of T
+    cond_inv_GW(jj) = cond(Q_GW * diag(1./d_GW));
+    cond_inv_B(jj) = cond(Q_B * diag(1./d_B));
+    cond_inv_direct(jj) = cond(Tinv);
+
     % Save the results
-    save(strcat("data/numerical_eval_N_multiple_transforms.mat"),"N_vec","cond_direct","cond_B","cond_GW","Tinv_error_direct","Tinv_error_B","Tinv_error_GW","T_error_direct","T_error_B","T_error_GW","time_B","time_GW","time_direct")
+    save(strcat("data/numerical_eval_N_multiple_transforms.mat"),"N_vec","cond_direct","cond_B","cond_GW","cond_inv_direct","cond_inv_B","cond_inv_GW","Tinv_error_direct","Tinv_error_B","Tinv_error_GW","T_error_direct","T_error_B","T_error_GW","time_B","time_GW","time_direct")
 end

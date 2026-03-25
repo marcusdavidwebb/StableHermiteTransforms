@@ -37,24 +37,24 @@ for jj=1:max(size(N_vec))
     
     % Unstable direct algorithm
     tic
-    for l=1:2 % For fairer timings repeat experiment twice
+    for l=1:20 % For fairer timings repeat experiment twice
         [T, Tinv] = initialise_Hermite_transform_unstable(N);
     end
-    time_direct(jj)=toc/2;
+    time_direct(jj)=toc/20;
 
     % New algorithm
     tic
-    for l=1:2 % For fairer timings repeat experiment twice
+    for l=1:20 % For fairer timings repeat experiment twice
         [d_GW, Q_GW] = initialise_Hermite_transform_Golub_Welsch(N);
     end
-    time_GW(jj)=toc/2;
+    time_GW(jj)=toc/20;
     
     % Bunck's algorithm
     tic
-    for l=1:2 % For fairer timings repeat experiment twice
+    for l=1:20 % For fairer timings repeat experiment twice
         [d_B, Q_B] = initialise_Hermite_transform_Bunck(N);
     end
-    time_B(jj)=toc/2;
+    time_B(jj)=toc/20;
     
     % Evaluate error in approximation of T, Tinv
     % Load reference value from csv file

@@ -113,3 +113,31 @@ hold off
 ylim([1e-15,1])
 xlim([min(N_vec),max(N_vec)])
 exportgraphics(gcf,strcat("images/error_T_asymptotic.pdf"),'ContentType','vector')
+
+%% Plot 7: Depiction of Q and d
+figure(7)
+
+N = 100;
+[d,Q] = initialise_Hermite_transform_Golub_Welsch(N);
+x = hermpts(N);
+
+subplot(1,2,1)
+imagesc(0:N-1,0:N-1,Q)
+axis square
+axis([0,N-1,0,N-1])
+colorbar
+set(gca,'FontSize',16)
+xlabel('$j$','Interpreter','latex', 'FontSize', 22)
+ylabel('$k$','Interpreter','latex', 'FontSize', 22)
+title('$Q_{kj}$','Interpreter','latex', 'FontSize', 22)
+
+subplot(1,2,2)
+plot(x,d, 'linewidth',2)
+axis square
+axis([1.1*x(1),1.1*x(N),0,1.1*max(d)])
+grid on
+set(gca,'FontSize',16)
+xlabel('$x_j$','Interpreter','latex', 'FontSize', 22)
+ylabel('$D_{jj}$','Interpreter','latex', 'FontSize', 22)
+
+exportgraphics(gcf,strcat("images/depict_Q_and_d.pdf"),'ContentType','vector')

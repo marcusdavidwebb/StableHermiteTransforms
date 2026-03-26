@@ -125,6 +125,7 @@ subplot(1,2,1)
 imagesc(0:N-1,0:N-1,Q)
 axis square
 axis([0,N-1,0,N-1])
+colormap jet(100)
 colorbar
 set(gca,'FontSize',16)
 xlabel('$j$','Interpreter','latex', 'FontSize', 22)

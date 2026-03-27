@@ -1,4 +1,4 @@
-function [psi_ref_herm] = gross_pitaevskii_reference_sln(N,dt,T,beta)
+function [psi_ref_herm] = gross_pitaevskii_reference_sln(N,dt,T,beta,psi0_fun)
     % Returns reference solution of Gross-Pitaevskii equation based on
     % Strang splitting
     %
@@ -27,7 +27,7 @@ else
     [d, Q] = initialise_Hermite_transform_Golub_Welsch(N);
     
     %% Choose initial condition
-    psi0_fun = @(xx) exp(-0.5*(xx-1.0).^2) .* exp(1i*0.5*xx);
+    % psi0_fun = @(xx) exp(-0.5*(xx-1.0).^2) .* exp(1i*0.5*xx);
     
     psi1_phys = psi0_fun(x);
     

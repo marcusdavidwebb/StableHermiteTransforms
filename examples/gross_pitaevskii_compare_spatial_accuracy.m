@@ -8,12 +8,12 @@ addpath('../modules/')
 
 %% Parameters
 % Spatial / Hermite discretisation
-N_ref=256;
+N_ref=1024;
 
 % Time discretisation
-Tend = 1.0;
-dt = 1e-3;
-dt_ref = 1e-3;
+Tend = 5.0;
+dt = 0.25*1e-3;
+dt_ref = 0.25*1e-3;
 M = round(Tend/dt);
 dt = Tend/M; % Correct for potential rounding discrepancy
 
@@ -21,22 +21,24 @@ dt = Tend/M; % Correct for potential rounding discrepancy
 beta = 1.0;              % nonlinearity strength
 
 % Initial condition: shifted Gaussian with phase
-psi0_fun = @(xx) exp(-0.5*(xx-1.0).^2) .* exp(1i*0.5*xx);
-
+alpha=0.125;
+psi0_fun = @(xx) 1/sqrt(alpha)*exp(-alpha*(xx+25.0).^2) .* exp(1i*0.5*xx);
 %% Compute/load reference solution
 fprintf("Computing reference solution...\n")
-psi_ref_herm=gross_pitaevskii_reference_sln(N_ref,dt_ref,Tend,beta);
+psi_ref_herm=gross_pitaevskii_reference_sln(N_ref,dt_ref,Tend,beta,psi0_fun);
 
 fprintf("Finished computing reference solution.\n")
 
 %% Store solution accuracy
 % N_vec=[4,6,8,11,16,23,32,45,64,91,128,181,256,362,512,724,1024,1448,2048,2896];
-N_vec=4:1:100;
+N_vec=20:20:1024;
+
+%10:20:1024;
 
 error_GW=zeros(size(N_vec));
 error_direct=zeros(size(N_vec));
 
-for jj=1:97
+for jj=1:max(size(N_vec))
     N=N_vec(jj)
 
     %% Initialise Hermite transforms
@@ -100,9 +102,9 @@ legend('Direct','Golub-Welsh')
 
 set(gca,'FontSize',16)
 xlabel('$N$','Interpreter','latex', 'FontSize', 22)
-ylabel('$L^2$-error at $t=1$','Interpreter','latex', 'FontSize', 22)
-xlim([1,100])
-ylim([1e-12,1])
+ylabel('$L^2$-error at $t=5$','Interpreter','latex', 'FontSize', 22)
+xlim([1,1000])
+% ylim([1e-12,1])
 legend(h,'Direct','Golub--Welsh','Interpreter','latex', 'FontSize', 16,'Location','northeast')
 grid on
 hold off

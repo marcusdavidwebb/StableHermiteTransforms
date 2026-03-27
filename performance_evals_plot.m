@@ -122,10 +122,11 @@ N = 100;
 x = hermpts(N);
 
 subplot(1,2,1)
-imagesc(0:N-1,0:N-1,Q)
+m = max(abs(Q(:)));
+imagesc(0:N-1,0:N-1,Q,[-m,m])
 axis square
 axis([0,N-1,0,N-1])
-colormap turbo(100)
+colormap turbo
 colorbar
 set(gca,'FontSize',16)
 xlabel('$j$','Interpreter','latex', 'FontSize', 22)

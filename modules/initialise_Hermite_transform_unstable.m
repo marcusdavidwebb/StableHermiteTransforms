@@ -54,5 +54,6 @@ function [T, Tinv] = initialise_Hermite_transform_unstable(N)
     %
     % Equivalently, row m is:
     %   (w .* exp(x.^2) .* Psi(:,m))'
-    Tinv = (Psi .* (w .* exp(x.^2))).';
+    d = 1./(N*T(:,N).^2);
+    Tinv = (Psi .* d).';
 end

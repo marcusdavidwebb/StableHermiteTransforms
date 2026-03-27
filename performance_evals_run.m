@@ -38,7 +38,7 @@ for jj=1:max(size(N_vec))
     % Unstable direct algorithm
     tic
     for l=1:20 % For fairer timings repeat experiment twice
-        [T, Tinv] = initialise_Hermite_transform_unstable_v2(N);
+        [T, Tinv] = initialise_Hermite_transform_unstable(N);
     end
     time_direct(jj)=toc/20;
 

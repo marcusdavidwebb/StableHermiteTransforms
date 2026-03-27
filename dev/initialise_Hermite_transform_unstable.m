@@ -1,4 +1,4 @@
-function [T, Tinv] = initialise_Hermite_transform_unstable_v2(N)
+function [T, Tinv] = initialise_Hermite_transform_unstable(N)
 %INITIALISE_HERMITE_TRANSFORM_DIRECT
 % Build the Hermite transform matrices directly via the unstable
 % three-term recurrence for Hermite functions:
@@ -54,6 +54,5 @@ function [T, Tinv] = initialise_Hermite_transform_unstable_v2(N)
     %
     % Equivalently, row m is:
     %   (w .* exp(x.^2) .* Psi(:,m))'
-    d = 1./(N*T(:,N).^2);
-    Tinv = (Psi .* d).';
+    Tinv = (Psi .* (w .* exp(x.^2))).';
 end

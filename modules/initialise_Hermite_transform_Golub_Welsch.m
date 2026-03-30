@@ -1,4 +1,4 @@
-function [d, Q] = initialise_Hermite_transform_Golub_Welsch(N)
+function [d, Q, x] = initialise_Hermite_transform_Golub_Welsch(N)
 %INITIALISE_HERMITE_TRANSFORM_GOLUB_WELSCH
 % Builds the orthogonal matrix Q and weight vector d such that
 % the coeffs2vals transform is d .* (Q' * cfs) and

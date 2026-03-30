@@ -29,12 +29,12 @@ exportgraphics(gcf,strcat("images/assembly_time_multiple.pdf"),'ContentType','ve
 %% Plot 2: Error in T
 clear h
 figure(2)
-h(3)=loglog(N_vec,T_error_GW,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
+h(3)=loglog(N_vec,T_error_GW./T_norm_exact,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
-h(2)=loglog(N_vec,T_error_B,'-.','Color','#edb120','LineWidth',3,'MarkerFaceColor','white')
-h(1)=loglog(N_vec,T_error_direct,'--','Color','#c74cb9','LineWidth',3,'MarkerFaceColor','white')%,'Color','#edb120','LineWidth',2)
+h(2)=loglog(N_vec,T_error_B./T_norm_exact,'-.','Color','#edb120','LineWidth',3,'MarkerFaceColor','white')
+h(1)=loglog(N_vec,T_error_direct./T_norm_exact,'--','Color','#c74cb9','LineWidth',3,'MarkerFaceColor','white')%,'Color','#edb120','LineWidth',2)
 set(gca,'FontSize',16)
-ylabel('$\|T-T_{\mathrm{approx}}\|_2$','Interpreter','latex', 'FontSize', 22)
+ylabel('$\|T-T_{\mathrm{approx}}\|_2/\|T\|_2$','Interpreter','latex', 'FontSize', 22)
 xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
 legend(h,'Direct', 'Bunck', 'Golub--Welsch','Interpreter','latex', 'FontSize', 16,'Location','northwest')
@@ -46,12 +46,12 @@ exportgraphics(gcf,strcat("images/error_T_multiple.pdf"),'ContentType','vector')
 %% Plot 3: Error in Tinv
 clear h
 figure(3)
-h(3)=loglog(N_vec,Tinv_error_GW,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
+h(3)=loglog(N_vec,Tinv_error_GW./T_inv_norm_exact,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
-h(2)=loglog(N_vec,Tinv_error_B,'-.','Color','#edb120','LineWidth',3,'MarkerFaceColor','white')
-h(1)=loglog(N_vec,Tinv_error_direct,'--','Color','#c74cb9','LineWidth',3,'MarkerFaceColor','white')%,'Color','#edb120','LineWidth',2)
+h(2)=loglog(N_vec,Tinv_error_B./T_inv_norm_exact,'-.','Color','#edb120','LineWidth',3,'MarkerFaceColor','white')
+h(1)=loglog(N_vec,Tinv_error_direct./T_inv_norm_exact,'--','Color','#c74cb9','LineWidth',3,'MarkerFaceColor','white')%,'Color','#edb120','LineWidth',2)
 set(gca,'FontSize',16)
-ylabel('$\|T^{-1}-T_{\mathrm{approx}}^{-1}\|_2$','Interpreter','latex', 'FontSize', 22)
+ylabel('$\|T^{-1}-T_{\mathrm{approx}}^{-1}\|_2/\|T^{-1}\|_2$','Interpreter','latex', 'FontSize', 22)
 xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
 ylim([1e-15,1])
@@ -101,14 +101,15 @@ clear h
 figure(6)
 h(2)=loglog(N_vec,T_error_GW./T_norm_exact,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
+h(3)=loglog(N_vec,T_error_B./T_norm_exact,'-.','Color','#edb120','LineWidth',3,'MarkerFaceColor','white')
 h(1)=loglog(N_vec,N_vec.^(-4)*0.1,'--','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
-loglog(N_vec,T_error_B./T_norm_exact,'-','Color','green','LineWidth',3,'MarkerFaceColor','white')
+% loglog(N_vec,T_error_B./T_norm_exact,'-','Color','green','LineWidth',3,'MarkerFaceColor','white')
 %loglog(N_vec,N_vec.^(-4),'-.','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 set(gca,'FontSize',16)
 ylabel('$\|T-T_{\mathrm{approx}}\|_2/\|T\|_2$','Interpreter','latex', 'FontSize', 22)
 xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
-legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Interpreter','latex', 'FontSize', 16,'Location','northwest')
+legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Bunck','Interpreter','latex', 'FontSize', 16,'Location','northwest')
 grid on
 hold off
 ylim([1e-15,1])
@@ -121,13 +122,13 @@ exportgraphics(gcf,strcat("images/error_T_asymptotic.pdf"),'ContentType','vector
 load("data/numerical_eval_N_multiple_transforms_asymptotic.mat")
 clear h
 figure(7)
-h(2)=loglog(N_vec,d_error_GW./T_norm_exact,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
+h(2)=loglog(N_vec,d_error_GW,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
 h(1)=loglog(N_vec,N_vec.^(-4)*0.1,'--','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 loglog(N_vec,T_error_B./T_norm_exact,'-','Color','green','LineWidth',3,'MarkerFaceColor','white')
 %loglog(N_vec,N_vec.^(-4),'-.','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 set(gca,'FontSize',16)
-ylabel('$\|T-T_{\mathrm{approx}}\|_2/\|T\|_2$','Interpreter','latex', 'FontSize', 22)
+ylabel('$\|d-d_{\mathrm{approx}}\|_2/\|d\|_2$','Interpreter','latex', 'FontSize', 22)
 xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
 legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Interpreter','latex', 'FontSize', 16,'Location','northwest')
@@ -145,13 +146,14 @@ clear h
 figure(8)
 h(2)=loglog(N_vec,Tinv_error_GW./T_inv_norm_exact,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
+h(3)=loglog(N_vec,Tinv_error_B./T_norm_exact,'-.','Color','#edb120','LineWidth',3,'MarkerFaceColor','white')
 h(1)=loglog(N_vec,N_vec.^(-4)*0.1,'--','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 %loglog(N_vec,N_vec.^(-4),'-.','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 set(gca,'FontSize',16)
 ylabel('$\|T-T_{\mathrm{approx}}\|_2/\|T\|_2$','Interpreter','latex', 'FontSize', 22)
 xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
-legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Interpreter','latex', 'FontSize', 16,'Location','northwest')
+legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Bunck','Interpreter','latex', 'FontSize', 16,'Location','northwest')
 grid on
 hold off
 ylim([1e-15,1])

@@ -32,14 +32,14 @@ x = hermpts(N); % Only used for plotting purposes
 
 % Example 1: shifted Gaussian with phase
 alpha=0.125;
-psi0_fun = @(xx) 1/sqrt(alpha)*exp(-alpha*(xx+25.0).^2) .* exp(1i*0.5*xx);
+u0_fun = @(xx) 1/sqrt(alpha)*exp(-alpha*(xx+25.0).^2) .* exp(1i*0.5*xx);
 
-psi1_phys = psi0_fun(x);
-psi2_phys = psi0_fun(x);
+u1_phys = u0_fun(x);
+u2_phys = u0_fun(x);
 
 % Convert to Hermite coefficients
-psi1_herm = Q * (psi1_phys./ d);
-psi2_herm = Tinv * psi1_phys;
+u1_herm = Q * (u1_phys./ d);
+u2_herm = Tinv * u1_phys;
 
 
 %% Time evolution: Strang splitting
@@ -47,39 +47,39 @@ psi2_herm = Tinv * psi1_phys;
 for m = 1:M
     M-m
     % ---- Half linear step in Hermite space ----
-    psi1_herm = exp(-i*dt*((0:N-1)'+1/2)) .* psi1_herm;
+    u1_herm = exp(-i*dt*((0:N-1)'+1/2)) .* u1_herm;
 
-    % psi2_herm = exp(-i*dt*((0:N-1)'+1/2)) .* psi2_herm;
+    % u2_herm = exp(-i*dt*((0:N-1)'+1/2)) .* u2_herm;
 
     % ---- Full nonlinear step in physical space ----
 
-    psi1_phys = d .* (Q' * psi1_herm);
-    psi1_phys = exp(-1i * dt * (beta * abs(psi1_phys).^2)) .* psi1_phys;
-    psi1_herm = Q * (psi1_phys ./ d);
+    u1_phys = d .* (Q' * u1_herm);
+    u1_phys = exp(-1i * dt * (beta * abs(u1_phys).^2)) .* u1_phys;
+    u1_herm = Q * (u1_phys ./ d);
 
-    % psi2_phys = T * psi2_herm;
-    % psi2_phys = exp(-1i * dt * (beta * abs(psi2_phys).^2)) .* psi2_phys;
-    % psi2_herm = Tinv * psi2_phys;
+    % u2_phys = T * u2_herm;
+    % u2_phys = exp(-1i * dt * (beta * abs(u2_phys).^2)) .* u2_phys;
+    % u2_herm = Tinv * u2_phys;
 
     % ---- Half linear kinetic step in Hermite space ----
-    psi1_herm = exp(-i*dt*((0:N-1)'+1/2)) .* psi1_herm;
+    u1_herm = exp(-i*dt*((0:N-1)'+1/2)) .* u1_herm;
 
-    % psi2_herm = exp(-i*dt*((0:N-1)'+1/2)) .* psi2_herm;
+    % u2_herm = exp(-i*dt*((0:N-1)'+1/2)) .* u2_herm;
     
-    if isnan(sum(psi1_herm))
+    if isnan(sum(u1_herm))
         input('broke')
     end
 
     % Plot evolution of the solution field
     linestyle=["-","--","-.","-.","-.","-."];
     if mod(m-1,M/2-1)==0 %& m<3000
-        psi1_phys = d .* (Q' * psi1_herm);
-        % psi2_phys = d .* (Q' * psi2_herm);
-        h(min(floor(m/(M/2-1))+1,3))=plot(x,abs(psi1_phys),linestyle(min(floor(m/(M/2-1))+1,3)),'Color','black','LineWidth',2,'MarkerFaceColor','white');
+        u1_phys = d .* (Q' * u1_herm);
+        % u2_phys = d .* (Q' * u2_herm);
+        h(min(floor(m/(M/2-1))+1,3))=plot(x,abs(u1_phys),linestyle(min(floor(m/(M/2-1))+1,3)),'Color','black','LineWidth',2,'MarkerFaceColor','white');
         hold on
         set(gca,'FontSize',16)
         xlabel('$x$','Interpreter','latex', 'FontSize', 22)
-        ylabel('$|\psi(t)|$','Interpreter','latex', 'FontSize', 22)
+        ylabel('$|u(t)|$','Interpreter','latex', 'FontSize', 22)
         ylim([0,3])
         % xlim([-10,10])
         grid on

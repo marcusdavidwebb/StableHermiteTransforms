@@ -22,10 +22,10 @@ beta = 1.0;              % nonlinearity strength
 
 % Initial condition: shifted Gaussian with phase
 alpha=0.125;
-psi0_fun = @(xx) 1/sqrt(alpha)*exp(-alpha*(xx+25.0).^2) .* exp(1i*0.5*xx);
+u0_fun = @(xx) 1/sqrt(alpha)*exp(-alpha*(xx+25.0).^2) .* exp(1i*0.5*xx);
 %% Compute/load reference solution
 fprintf("Computing reference solution...\n")
-psi_ref_herm=gross_pitaevskii_reference_sln(N_ref,dt_ref,Tend,beta,psi0_fun);
+u_ref_herm=gross_pitaevskii_reference_sln(N_ref,dt_ref,Tend,beta,u0_fun);
 
 fprintf("Finished computing reference solution.\n")
 
@@ -48,46 +48,46 @@ for jj=1:max(size(N_vec))
     
     %% Build differentiation / kinetic operator in Hermite space
     
-    psi1_phys = psi0_fun(x);
-    psi2_phys = psi0_fun(x);
+    u1_phys = u0_fun(x);
+    u2_phys = u0_fun(x);
     
     % Convert to Hermite coefficients
-    psi1_herm = Q * (psi1_phys./ d);
-    psi2_herm = Tinv * psi1_phys;
+    u1_herm = Q * (u1_phys./ d);
+    u2_herm = Tinv * u1_phys;
     
     
     %% Time evolution: Strang splitting
     
     for m = 1:M
         % ---- Half linear step in Hermite space ----
-        psi1_herm = exp(-i*dt*((0:N-1)'+1/2)) .* psi1_herm;
+        u1_herm = exp(-i*dt*((0:N-1)'+1/2)) .* u1_herm;
     
-        psi2_herm = exp(-i*dt*((0:N-1)'+1/2)) .* psi2_herm;
+        u2_herm = exp(-i*dt*((0:N-1)'+1/2)) .* u2_herm;
     
         % ---- Full nonlinear step in physical space ----
     
-        psi1_phys = d .* (Q' * psi1_herm);
-        psi1_phys = exp(-1i * dt * (beta * abs(psi1_phys).^2)) .* psi1_phys;
-        psi1_herm = Q * (psi1_phys ./ d);
+        u1_phys = d .* (Q' * u1_herm);
+        u1_phys = exp(-1i * dt * (beta * abs(u1_phys).^2)) .* u1_phys;
+        u1_herm = Q * (u1_phys ./ d);
     
-        psi2_phys = T * psi2_herm;
-        psi2_phys = exp(-1i * dt * (beta * abs(psi2_phys).^2)) .* psi2_phys;
-        psi2_herm = Tinv * psi2_phys;
+        u2_phys = T * u2_herm;
+        u2_phys = exp(-1i * dt * (beta * abs(u2_phys).^2)) .* u2_phys;
+        u2_herm = Tinv * u2_phys;
     
         % ---- Half linear kinetic step in Hermite space ----
-        psi1_herm = exp(-i*dt*((0:N-1)'+1/2)) .* psi1_herm;
+        u1_herm = exp(-i*dt*((0:N-1)'+1/2)) .* u1_herm;
     
-        psi2_herm = exp(-i*dt*((0:N-1)'+1/2)) .* psi2_herm;
+        u2_herm = exp(-i*dt*((0:N-1)'+1/2)) .* u2_herm;
     end
 
-    error_direct(jj) = sqrt(norm(psi2_herm-psi_ref_herm(1:N))^2+norm(psi_ref_herm(N+1:end))^2);
-    error_GW(jj) = sqrt(norm(psi1_herm-psi_ref_herm(1:N))^2+norm(psi_ref_herm(N+1:end))^2);
+    error_direct(jj) = sqrt(norm(u2_herm-u_ref_herm(1:N))^2+norm(u_ref_herm(N+1:end))^2);
+    error_GW(jj) = sqrt(norm(u1_herm-u_ref_herm(1:N))^2+norm(u_ref_herm(N+1:end))^2);
 
 end
 
 %% Save data
 dataset=strcat('N_',num2str(N),'_dt_',strrep(num2str(dt), '.', '-'),'_T_',strrep(num2str(Tend), '.', '-'),'_beta_',strrep(num2str(beta), '.', '-'));
-filename=strcat('../data/psi_ref_',dataset,'.mat');
+filename=strcat('../data/u_ref_',dataset,'.mat');
 
 save(filename);
 

@@ -14,12 +14,17 @@ time_GW=zerovec;
 time_direct=zerovec;
 time_B=zerovec;
 
+T_norm_exact=zerovec;
+T_inv_norm_exact=zerovec;
+
 T_error_GW = zerovec;
 T_error_B = zerovec;
 T_error_direct = zerovec;
 Tinv_error_GW = zerovec;
 Tinv_error_B = zerovec;
 Tinv_error_direct = zerovec;
+
+d_error_GW = zerovec;
 
 cond_GW = zerovec;
 cond_B = zerovec;
@@ -37,21 +42,21 @@ for jj=1:max(size(N_vec))
     
     % Unstable direct algorithm
     tic
-    for l=1:20 % For fairer timings repeat experiment twice
+    for l=1:2 % For fairer timings repeat experiment twice
         [T, Tinv] = initialise_Hermite_transform_unstable(N);
     end
     time_direct(jj)=toc/20;
 
     % New algorithm
     tic
-    for l=1:20 % For fairer timings repeat experiment twice
+    for l=1:2 % For fairer timings repeat experiment twice
         [d_GW, Q_GW] = initialise_Hermite_transform_Golub_Welsch(N);
     end
     time_GW(jj)=toc/20;
     
     % Bunck's algorithm
     tic
-    for l=1:20 % For fairer timings repeat experiment twice
+    for l=1:2 % For fairer timings repeat experiment twice
         [d_B, Q_B] = initialise_Hermite_transform_Bunck(N);
     end
     time_B(jj)=toc/20;
@@ -70,6 +75,12 @@ for jj=1:max(size(N_vec))
     Tinv_error_B(jj) = norm(Q_B * diag(1./d_B) - Q * diag(1./d));
     Tinv_error_direct(jj) = norm(Tinv - Q * diag(1./d));
 
+    d_error_GW(jj) = norm(d_GW - d);
+
+    T_norm_exact(jj) = norm(diag(d) * Q');
+    T_inv_norm_exact(jj) = norm(Q * diag(1./d));
+
+
     % Evaluate the condition number of T
     cond_GW(jj) = cond(diag(d_GW) * Q_GW');
     cond_B(jj) = cond(diag(d_B) * Q_B');
@@ -81,5 +92,5 @@ for jj=1:max(size(N_vec))
     cond_inv_direct(jj) = cond(Tinv);
 
     % Save the results
-    save(strcat("data/numerical_eval_N_multiple_transforms.mat"),"N_vec","cond_direct","cond_B","cond_GW","cond_inv_direct","cond_inv_B","cond_inv_GW","Tinv_error_direct","Tinv_error_B","Tinv_error_GW","T_error_direct","T_error_B","T_error_GW","time_B","time_GW","time_direct")
+    save(strcat("data/numerical_eval_N_multiple_transforms_asymptotic.mat"),"N_vec","cond_direct","cond_B","cond_GW","cond_inv_direct","cond_inv_B","cond_inv_GW","d_error_GW","T_norm_exact","T_inv_norm_exact","Tinv_error_direct","Tinv_error_B","Tinv_error_GW","T_error_direct","T_error_B","T_error_GW","time_B","time_GW","time_direct")
 end

@@ -189,14 +189,12 @@ xlim([min(N_vec),max(N_vec)])
 exportgraphics(gcf,strcat("images/error_T_inv_asymptotic.pdf"),'ContentType','vector')
 
 
-%% Plot 9: Depiction of Q and d
+%% Plot 9: Depiction of Q
 figure(9)
 
 N = 100;
 [d,Q] = initialise_Hermite_transform_Golub_Welsch(N);
 x = hermpts(N);
-
-subplot(1,2,1)
 m = max(abs(Q(:)));
 imagesc(0:N-1,0:N-1,Q,[-m,m])
 axis square
@@ -208,7 +206,11 @@ xlabel('$j$','Interpreter','latex', 'FontSize', 22)
 ylabel('$k$','Interpreter','latex', 'FontSize', 22)
 title('$Q_{kj}$','Interpreter','latex', 'FontSize', 22)
 
-subplot(1,2,2)
+exportgraphics(gcf,strcat("images/depict_Q.pdf"),'ContentType','vector')
+
+
+%% Plot 10: Depiction of d
+figure(10)
 plot(x,d, 'linewidth',2)
 axis square
 axis([1.1*x(1),1.1*x(N),0,1.1*max(d)])
@@ -217,4 +219,4 @@ set(gca,'FontSize',16)
 xlabel('$x_j$','Interpreter','latex', 'FontSize', 22)
 ylabel('$D_{jj}$','Interpreter','latex', 'FontSize', 22)
 
-exportgraphics(gcf,strcat("images/depict_Q_and_d.pdf"),'ContentType','vector')
+exportgraphics(gcf,strcat("images/depict_d.pdf"),'ContentType','vector')

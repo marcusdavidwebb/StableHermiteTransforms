@@ -22,6 +22,7 @@ xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
 legend(h,'Direct', 'Bunck', 'Golub--Welsch','$\mathcal{O}(N^2)$','Interpreter','latex', 'FontSize', 16,'Location','northwest')
 grid on
+xlim([min(N_vec),max(N_vec)])
 hold off
 exportgraphics(gcf,strcat("images/assembly_time_multiple.pdf"),'ContentType','vector')
 
@@ -40,6 +41,7 @@ xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 legend(h,'Direct', 'Bunck', 'Golub--Welsch','Interpreter','latex', 'FontSize', 16,'Location','northwest')
 grid on
 hold off
+xlim([min(N_vec),max(N_vec)])
 ylim([1e-15,1])
 exportgraphics(gcf,strcat("images/error_T_multiple.pdf"),'ContentType','vector')
 
@@ -54,6 +56,7 @@ set(gca,'FontSize',16)
 ylabel('$\|T^{-1}-T_{\mathrm{approx}}^{-1}\|_2/\|T^{-1}\|_2$','Interpreter','latex', 'FontSize', 22)
 xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
+xlim([min(N_vec),max(N_vec)])
 ylim([1e-15,1])
 legend(h,'Direct', 'Bunck', 'Golub--Welsch','Interpreter','latex', 'FontSize', 16,'Location','northwest')
 grid on
@@ -74,6 +77,7 @@ xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 legend(h,'Direct', 'Bunck', 'Golub--Welsch','Interpreter','latex', 'FontSize', 16,'Location','northwest')
 grid on
 hold off
+xlim([min(N_vec),max(N_vec)])
 exportgraphics(gcf,strcat("images/cond_T_multiple.pdf"),'ContentType','vector')
 
 %% Plot 5: Condition number of Tinv
@@ -89,6 +93,7 @@ xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
 legend(h,'Direct', 'Bunck', 'Golub--Welsch','Interpreter','latex', 'FontSize', 16,'Location','northwest')
 grid on
+xlim([min(N_vec),max(N_vec)])
 ylim([1,1e16])
 hold off
 exportgraphics(gcf,strcat("images/cond_inv_T_multiple.pdf"),'ContentType','vector')

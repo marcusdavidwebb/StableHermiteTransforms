@@ -8,6 +8,17 @@ addpath('modules/')
 
 load("data/numerical_eval_N_multiple_transforms.mat")
 
+%% Exclude error values above threshold for cleanliness of plots
+threshold = 1e-1;
+
+d_error_GW(d_error_GW > threshold) = NaN;
+Tinv_error_direct(Tinv_error_direct > threshold) = NaN;
+Tinv_error_B(Tinv_error_B > threshold) = NaN;
+Tinv_error_GW(Tinv_error_GW > threshold) = NaN;
+T_error_direct(T_error_direct > threshold) = NaN;
+T_error_B(T_error_B > threshold) = NaN;
+T_error_GW(T_error_GW > threshold) = NaN;
+
 %% Plot 1: Assembly time
 clear h
 figure(1)
@@ -102,11 +113,15 @@ exportgraphics(gcf,strcat("images/cond_inv_T_multiple.pdf"),'ContentType','vecto
 %% Plot 6: Accuracy of asymptotic algorithm
 
 load("data/numerical_eval_N_multiple_transforms_asymptotic.mat")
+Tinv_error_GW(Tinv_error_GW > threshold) = NaN;
+T_error_GW(T_error_GW > threshold) = NaN;
 clear h
 figure(6)
 h(2)=loglog(N_vec,T_error_GW./T_norm_exact,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
 load("data/numerical_eval_N_multiple_transforms_clenshaw.mat")
+Tinv_error_GW(Tinv_error_GW > threshold) = NaN;
+T_error_GW(T_error_GW > threshold) = NaN;
 h(3)=loglog(N_vec,T_error_GW./T_norm_exact,'-.','Color','black','LineWidth',3,'MarkerFaceColor','white')
 h(1)=loglog(N_vec,N_vec.^(-4)*0.1,'--','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 % loglog(N_vec,T_error_B./T_norm_exact,'-','Color','green','LineWidth',3,'MarkerFaceColor','white')
@@ -126,6 +141,8 @@ exportgraphics(gcf,strcat("images/error_T_asymptotic.pdf"),'ContentType','vector
 %% Plot 7: Accuracy of asymptotic algorithm in d
 
 load("data/numerical_eval_N_multiple_transforms_asymptotic.mat")
+Tinv_error_GW(Tinv_error_GW > threshold) = NaN;
+T_error_GW(T_error_GW > threshold) = NaN;
 clear h
 figure(7)
 h(2)=loglog(N_vec,d_error_GW,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
@@ -148,11 +165,15 @@ exportgraphics(gcf,strcat("images/error_d_asymptotic.pdf"),'ContentType','vector
 %% Plot 8: Accuracy of asymptotic algorithm Tinv
 
 load("data/numerical_eval_N_multiple_transforms_asymptotic.mat")
+Tinv_error_GW(Tinv_error_GW > threshold) = NaN;
+T_error_GW(T_error_GW > threshold) = NaN;
 clear h
 figure(8)
 h(2)=loglog(N_vec,Tinv_error_GW./T_inv_norm_exact,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
 load("data/numerical_eval_N_multiple_transforms_clenshaw.mat")
+Tinv_error_GW(Tinv_error_GW > threshold) = NaN;
+T_error_GW(T_error_GW > threshold) = NaN;
 h(3)=loglog(N_vec,Tinv_error_GW./T_norm_exact,'-.','Color','black','LineWidth',3,'MarkerFaceColor','white')
 h(1)=loglog(N_vec,N_vec.^(-4)*0.1,'--','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 %loglog(N_vec,N_vec.^(-4),'-.','Color','red','LineWidth',1.5,'MarkerFaceColor','white')

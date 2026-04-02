@@ -101,6 +101,8 @@ clear h
 figure(6)
 h(2)=loglog(N_vec,T_error_GW./T_norm_exact,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
+load("data/numerical_eval_N_multiple_transforms_clenshaw.mat")
+h(3)=loglog(N_vec,T_error_GW./T_norm_exact,'-.','Color','black','LineWidth',3,'MarkerFaceColor','white')
 h(1)=loglog(N_vec,N_vec.^(-4)*0.1,'--','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 % loglog(N_vec,T_error_B./T_norm_exact,'-','Color','green','LineWidth',3,'MarkerFaceColor','white')
 %loglog(N_vec,N_vec.^(-4),'-.','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
@@ -108,7 +110,7 @@ set(gca,'FontSize',16)
 ylabel('$\|T-T_{\mathrm{approx}}\|_2/\|T\|_2$','Interpreter','latex', 'FontSize', 22)
 xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
-legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Interpreter','latex', 'FontSize', 16,'Location','northwest')
+legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Clenshaw','Interpreter','latex', 'FontSize', 16,'Location','northwest')
 grid on
 hold off
 ylim([1e-15,1])
@@ -138,21 +140,22 @@ xlim([min(N_vec),max(N_vec)])
 exportgraphics(gcf,strcat("images/error_d_asymptotic.pdf"),'ContentType','vector')
 
 
-%% Plot 8: Accuracy of asymptotic algorithm
+%% Plot 8: Accuracy of asymptotic algorithm Tinv
 
 load("data/numerical_eval_N_multiple_transforms_asymptotic.mat")
 clear h
 figure(8)
 h(2)=loglog(N_vec,Tinv_error_GW./T_inv_norm_exact,'-','Color','blue','LineWidth',3,'MarkerFaceColor','white')
 hold on
-h(3)=loglog(N_vec,Tinv_error_B./T_norm_exact,'-.','Color','#edb120','LineWidth',3,'MarkerFaceColor','white')
+load("data/numerical_eval_N_multiple_transforms_clenshaw.mat")
+h(3)=loglog(N_vec,Tinv_error_GW./T_norm_exact,'-.','Color','black','LineWidth',3,'MarkerFaceColor','white')
 h(1)=loglog(N_vec,N_vec.^(-4)*0.1,'--','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 %loglog(N_vec,N_vec.^(-4),'-.','Color','red','LineWidth',1.5,'MarkerFaceColor','white')
 set(gca,'FontSize',16)
-ylabel('$\|T-T_{\mathrm{approx}}\|_2/\|T\|_2$','Interpreter','latex', 'FontSize', 22)
+ylabel('$\|T^{-1}-T^{-1}_{\mathrm{approx}}\|_2/\|T^{-1}\|_2$','Interpreter','latex', 'FontSize', 22)
 xlabel('$N$','Interpreter','latex', 'FontSize', 22)
 
-legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Bunck','Interpreter','latex', 'FontSize', 16,'Location','northwest')
+legend(h,'$\mathcal{O}(N^{-4})$', 'Asymptotic','Clenshaw','Interpreter','latex', 'FontSize', 16,'Location','northwest')
 grid on
 hold off
 ylim([1e-15,1])

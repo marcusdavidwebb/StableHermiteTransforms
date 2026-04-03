@@ -103,8 +103,8 @@ If you use this code in your work, please cite the following paper:
 ```
 @article{webb2026,
      title={Stable Gauss--Hermite transforms via the Golub--Welsch algorithm},
-     author={Georg Maierhofer and Marcus Webb},
+     author={Marcus Webb and Georg Maierhofer},
      year={2026},
-     journal={arXiv preprint}
+     journal={arXiv preprint arXiv:2604.02041}
   }
 ```

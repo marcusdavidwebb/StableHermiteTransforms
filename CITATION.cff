@@ -2,18 +2,18 @@ cff-version: 1.2.0
 message: "If you use this work, please cite the following paper."
 title: "Stable Gauss--Hermite transforms via the Golub--Welsch algorithm"
 authors:
-  - family-names: "Maierhofer"
-    given-names: "Georg"
   - family-names: "Webb"
     given-names: "Marcus"
+  - family-names: "Maierhofer"
+    given-names: "Georg"
 url: "https://github.com/marcusdavidwebb/StableHermiteTransforms"
 preferred-citation:
   type: article
   authors:
-    - family-names: "Maierhofer"
-      given-names: "Georg"
     - family-names: "Webb"
       given-names: "Marcus"
+    - family-names: "Maierhofer"
+      given-names: "Georg"
   title: "Stable Gauss--Hermite transforms via the Golub--Welsch algorithm"
-  journal: "arXiv preprint"
+  journal: "arXiv preprint arXiv:2604.02041"
   year: 2026

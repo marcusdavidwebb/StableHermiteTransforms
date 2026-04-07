@@ -1,18 +1,17 @@
-%% Performance metrics of three approaches to computing the Hermite transform
 clear all
 rng(1) % Fix random seed for reproducability
-%% Compare direct assembly of Hermite transform against stable one
+%% Add paths
 
 addpath('modules/quadrature/')
 addpath('modules/')
 
-%% Initialise performance measures
+%% Initialise
 N_vec=[4,6,8,11,16,23,32,45,64,91,128,181,256,362,512,724,1024,1448,2048,2896,4096]; % transform sizes for experiments
 zerovec=zeros(size(N_vec));
 
 count=zerovec;
 
-%% Evaluate the performance tests for various transform sizes
+%% Evaluate
 for jj=1:max(size(N_vec))
     jj
     [d_GW, Q_GW] = initialise_Hermite_transform_Golub_Welsch(N_vec(jj));
